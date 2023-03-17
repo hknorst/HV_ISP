@@ -6,6 +6,11 @@
 #include <_serial.h>
 #include <_EEPROM.h>
 
+extern int error;
+extern int pmode;
+extern int here;
+extern uint8_t buff[256];
+
 void program_page()
 {
     char result = (char)STK_FAILED;

@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <defines.h>
-#include <globals.h>
+#include <_write.h>
 
 uint8_t getSerialChar();
 void fillBuff(int n);

@@ -3,6 +3,8 @@
 #include <_EEPROM.h>
 #include <_serial.h>
 
+extern int error;
+
 #define EECHUNK (32)
 uint8_t write_eeprom(unsigned int length)
 {

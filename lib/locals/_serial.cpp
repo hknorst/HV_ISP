@@ -1,5 +1,8 @@
 #include <_serial.h>
 
+extern uint8_t buff[256];
+extern int error;
+
 #ifdef saveDebugToEEPROM
 #include <_EEPROM.h>
 #endif

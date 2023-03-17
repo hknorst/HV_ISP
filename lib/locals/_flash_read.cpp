@@ -4,6 +4,12 @@
 #include <_write.h>
 #include <_serial.h>
 #include <_EEPROM.h>
+#include <_pmode.h>
+
+extern int pmode;
+extern unsigned int here;
+extern int error;
+extern int pmode;
 
 uint16_t flash_read(unsigned int addr)
 {

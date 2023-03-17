@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <defines.h>
-#include <globals.h>
 
 void program_page();
 void write_flash(int length);
