@@ -44,30 +44,22 @@ USE:
     EEPROM not tested!!!
  */
 
+//#include <stdint.h>
+#include <Arduino.h>
+#include <defines.h>
+#include <_serial.h>
+#include <_fuses.h>
+#include <_misc.h>
+#include <_pmode.h>
+#include <_flash_read.h>
+#include <_flash_write.h>
+#include <main.h>
 
+parameter param;
 int error = 0;
 int pmode = 0;
 unsigned int here; // address for reading and writing, set by 'U' command
 uint8_t buff[256]; // global block storage
-
-#define beget16(addr) (*addr * 256 + *(addr+1) )
-typedef struct param {
-  uint8_t devicecode;
-  uint8_t revision;
-  uint8_t progtype;
-  uint8_t parmode;
-  uint8_t polling;
-  uint8_t selftimed;
-  uint8_t lockbytes;
-  uint8_t fusebytes;
-  uint8_t flashpoll;
-  uint16_t eeprompoll;
-  uint16_t pagesize;
-  uint16_t eepromsize;
-  uint32_t flashsize;
-}
-parameter;
-parameter param;
 
 // Configure the serial port to use.
 //
@@ -81,19 +73,8 @@ parameter param;
 // On the Due and Zero, 'Serial' can be used too, provided you disable autoreset.
 // To use 'Serial': #define SERIAL Serial
 
-#undef SERIAL
-#ifdef SERIAL_PORT_USBVIRTUAL
-#define SERIAL SERIAL_PORT_USBVIRTUAL
-#else
-#define SERIAL Serial
-#endif
 
-#include <Arduino.h>
-#include <defines.h>
-#include <globals.h>
-#include <_serial.h>
-#include <_fuses.h>
-#include <_misc.h>
+
 
 
 void setup() {

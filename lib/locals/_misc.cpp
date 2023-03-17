@@ -1,4 +1,11 @@
+#include <Arduino.h>
 #include <_misc.h>
+#include <main.h>
+#include <defines.h>
+
+extern unsigned int here;
+extern uint8_t buff[256];
+extern parameter param;
 
 unsigned int current_page()
 {

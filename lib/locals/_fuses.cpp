@@ -7,6 +7,9 @@
 #include <_write.h>
 #include <_flash_read.h>
 
+extern int pmode;
+extern int here;
+
 void burnFuses()
 {
     byte hfuse = 0b11011111; // 0xDF;  //Default, ATTINY85 Datasheet pp. 148

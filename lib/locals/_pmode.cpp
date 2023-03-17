@@ -2,6 +2,8 @@
 
 #include <_pmode.h>
 
+extern int pmode;
+
 void start_pmode()
 {
     if (!pmode)

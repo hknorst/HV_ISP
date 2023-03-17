@@ -1,9 +1,13 @@
 // Functions for handling EEPROM writing / reading
 
+#include <Arduino.h>
 #include <_EEPROM.h>
 #include <_serial.h>
+#include <main.h>
 
 extern int error;
+extern int here;
+extern parameter param;
 
 #define EECHUNK (32)
 uint8_t write_eeprom(unsigned int length)
