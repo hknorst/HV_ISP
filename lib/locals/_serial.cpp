@@ -83,7 +83,7 @@ void universal()
    * This could use some more work but seems to be functional!
    * -td0g
    */
-  uint8_t ch;
+  //uint8_t ch;
   fillBuff(4);
   if (buff[0] == 0x30 && buff[1] == 0)
   {                                  // 0x30 0x00 0b000000aa 0x00 = Signature

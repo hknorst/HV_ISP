@@ -36,7 +36,7 @@ uint8_t write_eeprom_chunk(unsigned int start, unsigned int length)
     fillBuff(length);
     for (unsigned int x = 0; x < length; x++)
     {
-        unsigned int addr = start + x;
+        //unsigned int addr = start + x;
         // spi_transaction(0xC0, (addr >> 8) & 0xFF, addr & 0xFF, buff[x]);
         delay(45);
     }
@@ -46,10 +46,10 @@ uint8_t write_eeprom_chunk(unsigned int start, unsigned int length)
 char eeprom_read_page(int length)
 {
     // here again we have a word address
-    int start = here * 2;
+    //int start = here * 2;
     for (int x = 0; x < length; x++)
     {
-        int addr = start + x;
+        //int addr = start + x;
         uint8_t ee = 0; // VTG fix
         // uint8_t ee = spi_transaction(0xA0, (addr >> 8) & 0xFF, addr & 0xFF, 0xFF);
         SERIAL.print((char)ee);

@@ -16,3 +16,8 @@ typedef struct param {
   uint32_t flashsize;
 }
 parameter;
+
+void chipErase ();
+unsigned int readSignature ();
+void readFuses ();
+void writeFuse (unsigned int fuse, byte val);

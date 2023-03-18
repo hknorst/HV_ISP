@@ -13,7 +13,7 @@ extern int pmode;
 
 uint16_t flash_read(unsigned int addr)
 {
-    unsigned int _addr = addr;
+    //unsigned int _addr = addr;
 
     // Read Flash Low and High Bytes
     writeHV(addr, 0b00001100);

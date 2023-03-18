@@ -72,7 +72,7 @@ uint8_t write_flash_pages(int length)
             addr = addr >> 8;
             writeHV(addr, 0b00011100); // pp. 159 error - FOUR high bits in address LOL
             writeHV(0, 0b01100100);
-            writeHV(0, 01101100);
+            writeHV(0, 0b01101100);
             writeHV(0b00010000, 0b01001100); // Load “Write Flash” Command.  Seems to be called every buffer load cycle.
         }
         x += 2;
@@ -84,7 +84,7 @@ uint8_t write_flash_pages(int length)
     addr = addr >> 8;
     writeHV(addr, 0b00011100); // pp. 159 error - FOUR high bits in address for ATTINY85 LOL
     writeHV(0, 0b01100100);
-    writeHV(0, 01101100);
+    writeHV(0, 0b01101100);
     writeHV(0, 0b01001100); // Load "No Operation" Command
     return STK_OK;
 }
