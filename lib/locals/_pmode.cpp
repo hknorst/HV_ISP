@@ -8,15 +8,20 @@ void start_pmode()
 {
     if (!pmode)
     {
+        digitalWrite(SDI, LOW);
+        digitalWrite(SII, LOW);
+        digitalWrite(SDO, LOW);
+
         pinMode(SDO, OUTPUT);
         digitalWrite(VCC, 1);
-        delayMicroseconds(20);
+        delayMicroseconds(30);
         digitalWrite(RST, 0);
-        delayMicroseconds(10);
+        delayMicroseconds(30);
         pinMode(SDO, INPUT);
-        delayMicroseconds(200);
+        delayMicroseconds(300);
         // HVP mode entered.  Now command Flash Writing
         pmode = 1;
+        Serial.println("Programming mode on.");
     }
 }
 
@@ -28,5 +33,6 @@ void end_pmode()
         digitalWrite(VCC, 0);
         pinMode(SDO, OUTPUT);
         pmode = 0;
+        Serial.println("Programming mode off.");
     }
 }

@@ -3,3 +3,4 @@
 void burnFuses();
 void writeFusesHV(byte _l, byte _h);
 void readFusesHV();
+void chipErase();

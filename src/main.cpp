@@ -58,8 +58,12 @@ USE:
 parameter param;
 int error = 0;
 int pmode = 0;
+int lockbit = 0;
 unsigned int here; // address for reading and writing, set by 'U' command
 uint8_t buff[256]; // global block storage
+
+unsigned int eventLedBlink = 1000;
+unsigned long previousLedBlink = 0;
 
 // int error = 0;
 byte FuseH = 0;
@@ -94,6 +98,9 @@ void setup()
 
 void loop(void)
 {
+  /* Updates frequently */
+  unsigned long currentTime = millis();
+
   if (SERIAL.available())
   {
     uint8_t ch = getSerialChar();
@@ -200,132 +207,9 @@ void loop(void)
         SERIAL.print((char)STK_NOSYNC);
     }
   }
-  if (!digitalRead(BUTTON))
-  {
-    while (!digitalRead(BUTTON))
-    {
-      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-      delay(400);
-    }
-    Serial.println("Start fuses reset");
-    error = 0;
-    digitalWrite(LED_BUILTIN, HIGH);
-    digitalWrite(SDI, LOW);
-    digitalWrite(SII, LOW);
-    digitalWrite(SDO, LOW);
 
-    delayMicroseconds(30);  // wait long enough for target chip to see rising edge
-    digitalWrite(RST, LOW); // 12v On
-    delayMicroseconds(10);
-    pinMode(SDO, INPUT); // Set SDO to input
-    delayMicroseconds(300);
-    unsigned int sig = readSignature();
-
-    if (sig == ATTINY13)
-    {
-      chipErase();
-      writeFuse(LFUSE, 0x6A);
-      writeFuse(HFUSE, 0xFF);
-      readFuses(); // check to make sure fuses were set properly
-      if (FuseL != 0x6A || FuseH != 0xFF)
-      {
-        error = 5; // fast flash if fuses don't match expected
-      }
-    }
-    else if (sig == ATTINY24 || sig == ATTINY44 || sig == ATTINY84 ||
-             sig == ATTINY25 || sig == ATTINY45 || sig == ATTINY85)
-    {
-      chipErase();
-      writeFuse(LFUSE, 0x62);
-      writeFuse(HFUSE, 0xDF);
-      writeFuse(EFUSE, 0xFF);
-      readFuses(); // check to make sure fuses were set properly
-      if (FuseL != 0x62 || FuseH != 0xDF || FuseX != 0xFF)
-      {
-        error = 5; // fast flash if fuses don't match expected
-      }
-    }
-    else
-    {
-      error = 1; // slow flash if device signature is invalid
-    }
-
-    if(error == 5){
-      Serial.println("Fuses don't match expected");
-    }
-    if(error == 1){
-      Serial.println("Device signature is invalid");
-    }
-    error = 0;
-    digitalWrite(SCL, LOW);
-    digitalWrite(RST, HIGH);        // 12v Off
-    digitalWrite(LED_BUILTIN, LOW); // LED off for succerss
+if (currentTime - previousLedBlink >= eventLedBlink) {
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    previousLedBlink = currentTime;
   }
-}
-
-byte shiftOut(byte val1, byte val2)
-{
-  int inBits = 0;
-  // Wait until SDO goes high
-  while (!digitalRead(SDO))
-    ;
-  unsigned int dout = (unsigned int)val1 << 2;
-  unsigned int iout = (unsigned int)val2 << 2;
-  for (int ii = 10; ii >= 0; ii--)
-  {
-    digitalWrite(SDI, !!(dout & (1 << ii)));
-    digitalWrite(SII, !!(iout & (1 << ii)));
-    inBits <<= 1;
-    inBits |= digitalRead(SDO);
-    digitalWrite(SCL, HIGH);
-    digitalWrite(SCL, LOW);
-  }
-  return inBits >> 2;
-}
-
-void writeFuse(unsigned int fuse, byte val)
-{
-  shiftOut(0x40, 0x4C);
-  shiftOut(val, 0x2C);
-
-  shiftOut(0x00, (byte)(fuse >> 8));
-  shiftOut(0x00, (byte)fuse);
-}
-
-void readFuses()
-{
-  shiftOut(0x04, 0x4C); // LFuse
-  shiftOut(0x00, 0x68);
-  FuseL = shiftOut(0x00, 0x6C);
-
-  shiftOut(0x04, 0x4C); // HFuse
-  shiftOut(0x00, 0x7A);
-  FuseH = shiftOut(0x00, 0x7E);
-
-  shiftOut(0x04, 0x4C); // EFuse
-  shiftOut(0x00, 0x6A);
-  FuseX = shiftOut(0x00, 0x6E);
-}
-
-unsigned int readSignature()
-{
-  unsigned int sig = 0;
-  byte val;
-  for (int ii = 1; ii < 3; ii++)
-  {
-    shiftOut(0x08, 0x4C);
-    shiftOut(ii, 0x0C);
-    shiftOut(0x00, 0x68);
-    val = shiftOut(0x00, 0x6C);
-    sig = (sig << 8) + val;
-  }
-  return sig;
-}
-
-// See table 20-16 in the datasheet
-void chipErase()
-{
-  shiftOut(0b10000000, 0b01001100);
-  shiftOut(0b00000000, 0b01100100);
-  shiftOut(0b00000000, 0b01101100);
 }

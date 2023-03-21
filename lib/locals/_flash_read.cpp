@@ -77,20 +77,20 @@ void read_signature()
         return;
     }
     SERIAL.print((char)STK_INSYNC);
-    writeHV(0b00001000, 0b01001100);
-    writeHV(0b00000000, 0b00001100);
-    writeHV(0b00000000, 0b01101000);
-    uint8_t high = writeHV(0b00000000, 0b01101100);
+    writeHV(0X08, 0X4C);
+    writeHV(0X00, 0X0C);
+    writeHV(0X00, 0X68);
+    uint8_t high = writeHV(0X00, 0X6C);
     SERIAL.print((char)high);
-    writeHV(0b00001000, 0b01001100);
-    writeHV(0b00000001, 0b00001100);
-    writeHV(0b00000000, 0b01101000);
-    uint8_t middle = writeHV(0b00000000, 0b01101100);
+    writeHV(0X08, 0X4C);
+    writeHV(0X01, 0X0C);
+    writeHV(0X00, 0X68);
+    uint8_t middle = writeHV(0X00, 0X6C);
     SERIAL.print((char)middle);
-    writeHV(0b00001000, 0b01001100);
-    writeHV(0b00000010, 0b00001100);
-    writeHV(0b00000000, 0b01101000);
-    uint8_t low = writeHV(0b00000000, 0b01101100);
+    writeHV(0X08, 0X4C);
+    writeHV(0X02, 0X0C);
+    writeHV(0X00, 0X68);
+    uint8_t low = writeHV(0X00, 0X6C);
     SERIAL.print((char)low);
     SERIAL.print((char)STK_OK);
 }
